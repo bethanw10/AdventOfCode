@@ -5,16 +5,6 @@ def calculate_fuel(num):
     return math.trunc(num / 3) - 2
 
 
-def part_1():
-    file = open("input.txt", "r")
-    total = 0
-
-    for line in file:
-        total += calculate_fuel(int(line))
-
-    print(total)
-
-
 def calculate_fuel_part_2(num, total):
     fuel_cost = math.trunc(num / 3) - 2
 
@@ -25,7 +15,7 @@ def calculate_fuel_part_2(num, total):
     return total
 
 
-def part_2():
+def main():
     file = open("input.txt", "r")
     total = 0
 
@@ -36,4 +26,4 @@ def part_2():
 
 
 if __name__ == "__main__":
-    part_2()
+    main()
