@@ -23,20 +23,21 @@ def run_op_codes(content):
         elif op_code == '2':
             content[output_pos] = str(input_1 * input_2)
 
-        print(op_code)
-
 
 def main():
+    for i in range(0, 100):
+        for j in range(0, 100):
+            with open('input.txt', 'r+') as file:
+                content = file.read().split(',')
 
-    with open('input.txt', 'r+') as file:
-        content = file.read().split(',')
-        print(content)
+                content[1] = str(i)
+                content[2] = str(j)
 
-        run_op_codes(content)
+                run_op_codes(content)
 
-        print(content)
-
-
+                if content[0] == '19690720':
+                    print('Found solution', i, j)
+                    return
 
 
 if __name__ == "__main__":
