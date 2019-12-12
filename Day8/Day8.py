@@ -46,9 +46,6 @@ def part_2(data):
                 if image[y][x] == '2':
                     image[y][x] = pixel
 
-            print()
-
-    print(image)
     print_image(image)
 
 
