@@ -1,26 +1,6 @@
 import csv
 
 
-def main_part_1():
-    file = open("input.txt", "r")
-    csv_reader = csv.reader(file, delimiter=',')
-
-    wire_1_coords = get_coords_for_wire(next(csv_reader))
-    wire_2_coords = get_coords_for_wire(next(csv_reader))
-
-    intersections = set(wire_1_coords).intersection(set(wire_2_coords))
-
-    shortest_distance = None
-
-    for intersection in intersections:
-        distance = abs(intersection[0]) + abs(intersection[1])
-
-        if shortest_distance is None or distance < shortest_distance:
-            shortest_distance = distance
-
-    print(shortest_distance)
-
-
 def add_coords_from_path(coords, path, current_pos):
     direction = path[0]
     number = int(path[1:])
@@ -53,6 +33,26 @@ def get_coords_for_wire(wire):
         current_pos = add_coords_from_path(coords, path, current_pos)
 
     return coords
+
+
+def main_part_1():
+    file = open("input.txt", "r")
+    csv_reader = csv.reader(file, delimiter=',')
+
+    wire_1_coords = get_coords_for_wire(next(csv_reader))
+    wire_2_coords = get_coords_for_wire(next(csv_reader))
+
+    intersections = set(wire_1_coords).intersection(set(wire_2_coords))
+
+    shortest_distance = None
+
+    for intersection in intersections:
+        distance = abs(intersection[0]) + abs(intersection[1])
+
+        if shortest_distance is None or distance < shortest_distance:
+            shortest_distance = distance
+
+    print(shortest_distance)
 
 
 def main_part_2():
