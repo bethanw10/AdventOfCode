@@ -77,12 +77,9 @@ def main_part_2():
 
         if lowest_step_count is None or step_count < lowest_step_count:
             lowest_step_count = step_count
-            print(steps_1, steps_2)
 
-    print()
     print(lowest_step_count)
 
 
 if __name__ == "__main__":
     main_part_2()
-
