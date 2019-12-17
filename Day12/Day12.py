@@ -1,16 +1,24 @@
 class Moon:
     def __init__(self, x, y, z):
-        self.pos_x, self.pos_y, self.pos_z = x, y, z
-        self.vel_x, self.vel_y, self.vel_z = 0, 0, 0
+        self.pos = {'x': x, 'y': y, 'z': z}
+        self.vel = {'x': 0, 'y': 0, 'z': 0}
 
     def __repr__(self):
         return \
-            f"pos=<x={str(self.pos_x).rjust(3, ' ')}, " \
-            f"y={str(self.pos_y).rjust(3, ' ')}, " \
-            f"z={str(self.pos_z).rjust(3, ' ')}>, " \
-            f"vel=<x={str(self.vel_x).rjust(3, ' ')}, " \
-            f"y={str(self.vel_y).rjust(3, ' ')}, " \
-            f"z={str(self.vel_z).rjust(3, ' ')}>"
+            f"pos=<x={str(self.pos['x']).rjust(3, ' ')}, " \
+            f"y={str(self.pos['y']).rjust(3, ' ')}, " \
+            f"z={str(self.pos['z']).rjust(3, ' ')}>, " \
+            f"vel=<x={str(self.vel['x']).rjust(3, ' ')}, " \
+            f"y={str(self.vel['y']).rjust(3, ' ')}, " \
+            f"z={str(self.vel['z']).rjust(3, ' ')}>"
+
+
+def find_pairs(array):
+    for i in range(len(array)):
+        j = i + 1
+        while j < len(array):
+            yield(array[i], array[j])
+            j += 1
 
 
 def read_input():
@@ -29,11 +37,38 @@ def read_input():
     return moons
 
 
+def run_cycle(moons):
+    pairs = find_pairs(moons)
+
+    for moon_1, moon_2 in pairs:
+        for pos in ['x', 'y', 'z']:
+            moon_1.vel[pos] += 1 if moon_2.pos[pos] > moon_1.pos[pos] else -1
+            moon_2.vel[pos] += -1 if moon_1.pos[pos] > moon_2.pos[pos] else 1
+
+    for moon in moons:
+        for pos in ['x', 'y', 'z']:
+            moon.pos[pos] += moon.vel[pos]
+
+
 def main():
     moons = read_input()
 
+    for i in range(1000):
+        run_cycle(moons)
+
+    total = 0
+
     for moon in moons:
-        print(moon)
+        pos_total = 0
+        vel_total = 0
+
+        for pos in ['x', 'y', 'z']:
+            pos_total += abs(moon.pos[pos])
+            vel_total += abs(moon.vel[pos])
+
+        total += (pos_total * vel_total)
+
+    print(total)
 
 
 if __name__ == "__main__":
