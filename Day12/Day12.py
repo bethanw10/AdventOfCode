@@ -1,3 +1,6 @@
+import math
+
+
 class Moon:
     def __init__(self, x, y, z):
         self.pos = {'x': x, 'y': y, 'z': z}
@@ -11,6 +14,10 @@ class Moon:
             f"vel=<x={str(self.vel['x']).rjust(3, ' ')}, " \
             f"y={str(self.vel['y']).rjust(3, ' ')}, " \
             f"z={str(self.vel['z']).rjust(3, ' ')}>"
+
+
+def lcm(a, b):
+    return abs(a * b) // math.gcd(a, b)
 
 
 def find_pairs(array):
@@ -56,7 +63,7 @@ def run_cycle(moons, pairs):
         for pos in ['x', 'y', 'z']:
             moon.pos[pos] += moon.vel[pos]
 
-        print(moon)
+        # print(moon)
 
 
 def run_cycles(moons, cycles):
@@ -65,16 +72,30 @@ def run_cycles(moons, cycles):
     for i in range(cycles):
         print()
         print(i + 1)
-        run_cycle(pairs, moons)
-
-
-def find_previos_state(moons, cycles):
-    pairs = find_pairs(moons)
-
-    for i in range(cycles):
-        print()
-        print(i + 1)
         run_cycle(moons, pairs)
+
+
+def all_match(original, new):
+    for i in range(len(new)):
+        if original[i] != new[i]:
+            return False
+
+    return True
+
+
+def num_steps_until_original(moons, pos):
+    original = [(moon.pos[pos], moon.vel[pos]) for moon in moons]
+
+    pairs = find_pairs(moons)
+    i = 0
+
+    while True:
+        # print('\n', i)
+        run_cycle(moons, pairs)
+        i += 1
+
+        if all_match(original, [(moon.pos[pos], moon.vel[pos]) for moon in moons]):
+            return i
 
 
 def calculate_energy(moons):
@@ -96,9 +117,11 @@ def calculate_energy(moons):
 def main():
     moons = read_input('input.txt')
 
-    run_cycles(moons, 1000)
+    x = num_steps_until_original(moons, 'x')
+    y = num_steps_until_original(moons, 'y')
+    z = num_steps_until_original(moons, 'z')
 
-    calculate_energy(moons)
+    print(lcm(x, lcm(y, z)))
 
 
 if __name__ == "__main__":
