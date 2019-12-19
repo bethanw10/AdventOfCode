@@ -14,17 +14,21 @@ class Moon:
 
 
 def find_pairs(array):
+    pairs = []
+
     for i in range(len(array)):
         j = i + 1
         while j < len(array):
-            yield(array[i], array[j])
+            pairs.append((array[i], array[j]))
             j += 1
 
+    return pairs
 
-def read_input():
+
+def read_input(filename):
     moons = []
 
-    with open('input.txt', 'r+') as file:
+    with open(filename, 'r+') as file:
         content = file.read().split('\n')
 
     for line in content:
@@ -37,25 +41,43 @@ def read_input():
     return moons
 
 
-def run_cycle(moons):
-    pairs = find_pairs(moons)
-
+def run_cycle(moons, pairs):
     for moon_1, moon_2 in pairs:
         for pos in ['x', 'y', 'z']:
-            moon_1.vel[pos] += 1 if moon_2.pos[pos] > moon_1.pos[pos] else -1
-            moon_2.vel[pos] += -1 if moon_1.pos[pos] > moon_2.pos[pos] else 1
+
+            if moon_1.pos[pos] > moon_2.pos[pos]:
+                moon_1.vel[pos] -= 1
+                moon_2.vel[pos] += 1
+            elif moon_1.pos[pos] < moon_2.pos[pos]:
+                moon_1.vel[pos] += 1
+                moon_2.vel[pos] -= 1
 
     for moon in moons:
         for pos in ['x', 'y', 'z']:
             moon.pos[pos] += moon.vel[pos]
 
+        print(moon)
 
-def main():
-    moons = read_input()
 
-    for i in range(1000):
-        run_cycle(moons)
+def run_cycles(moons, cycles):
+    pairs = find_pairs(moons)
 
+    for i in range(cycles):
+        print()
+        print(i + 1)
+        run_cycle(pairs, moons)
+
+
+def find_previos_state(moons, cycles):
+    pairs = find_pairs(moons)
+
+    for i in range(cycles):
+        print()
+        print(i + 1)
+        run_cycle(moons, pairs)
+
+
+def calculate_energy(moons):
     total = 0
 
     for moon in moons:
@@ -68,7 +90,15 @@ def main():
 
         total += (pos_total * vel_total)
 
-    print(total)
+    print('Total energy: ', total)
+
+
+def main():
+    moons = read_input('input.txt')
+
+    run_cycles(moons, 1000)
+
+    calculate_energy(moons)
 
 
 if __name__ == "__main__":
